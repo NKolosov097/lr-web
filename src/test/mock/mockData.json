@@ -1,0 +1,14 @@
+{
+    "data": [
+        {
+            "latitude": 55.1641667,
+            "longitude": 37.9522222,
+            "altitude": 20000,
+            "accuracy": null,
+            "altitudeAccuracy": null,
+            "heading": null,
+            "speed": null,
+            "timeStamp": 1707153996
+        }
+    ]
+}

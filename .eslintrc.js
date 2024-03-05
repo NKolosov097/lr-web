@@ -31,4 +31,12 @@ module.exports = {
     },
     plugins: ['@typescript-eslint', 'react'],
     rules: {},
+    settings: {
+        'import/resolver': {
+            node: {
+                extensions: ['.js', '.jsx', '.ts', '.tsx'],
+                moduleDirectory: ['node_modules', 'src/'],
+            },
+        },
+    },
 }

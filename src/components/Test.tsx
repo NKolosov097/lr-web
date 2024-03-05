@@ -17,18 +17,16 @@ export default {
     component: Cesium3DTileset,
 }
 
-export const Basic = (args) => {
+export const Basic = () => {
     const ref = useRef<CesiumComponentRef<CesiumViewer>>(null)
     return (
         <Viewer full ref={ref}>
             <ImageryLayer
-                {...args}
                 imageryProvider={ArcGisMapServerImageryProvider.fromUrl(
                     'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer'
                 )}
             />
             <Cesium3DTileset
-                {...args}
                 url="./tileset/tileset.json"
                 onTileLoad={() => console.log('loaded')}
                 onReady={(tileset) => {
@@ -39,19 +37,18 @@ export const Basic = (args) => {
     )
 }
 
-export const Resource = (args) => {
+export const Resource = () => {
     const ref = useRef<CesiumComponentRef<CesiumViewer>>(null)
     return (
         <Viewer full ref={ref}>
-            <Cesium3DTileset {...args} url={IonResource.fromAssetId(96188)} />
+            <Cesium3DTileset url={IonResource.fromAssetId(96188)} />
         </Viewer>
     )
 }
 
-export const BasicImageryLayer = (args) => (
+export const BasicImageryLayer = () => (
     <Viewer full>
         <ImageryLayer
-            {...args}
             imageryProvider={ArcGisMapServerImageryProvider.fromUrl(
                 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer'
             )}
