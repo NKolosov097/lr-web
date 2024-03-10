@@ -1,4 +1,4 @@
-export interface Data {
+export interface Polyline {
     latitude: number // Широта
     longitude: number // Долгота
     altitude: number | undefined // Высота
