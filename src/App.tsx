@@ -26,6 +26,9 @@ import {
     ScreenSpaceEvent,
     PolylineCollection,
     Polyline,
+    PolylineGraphics,
+    LabelGraphics,
+    LabelCollection,
 } from 'resium'
 import mockData from './test/mock/mockData.json'
 import { useEffect, useState } from 'react'
@@ -111,6 +114,20 @@ const App = () => {
                 >
                     <Polyline positions={positions} />
                 </PolylineCollection>
+
+                <LabelCollection>
+                    <Entity>
+                        <PolylineGraphics
+                            material={Color.WHITE}
+                            positions={positions}
+                        />
+                    </Entity>
+                    {positions.map((p, i) => (
+                        <Entity key={i} position={p}>
+                            <LabelGraphics text={i.toString()} />
+                        </Entity>
+                    ))}
+                </LabelCollection>
 
                 <CanvasEntity
                     name="Canvas title"
