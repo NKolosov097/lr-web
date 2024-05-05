@@ -1,4 +1,3 @@
-import React from "react"
 import { Button, Drawer, Input, Popover, Row } from "antd"
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons"
 import { Card } from "../Card/Card"

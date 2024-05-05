@@ -1,4 +1,3 @@
-import React from "react"
 import { UploadButton } from "./UploadButton/UploadButton"
 import { Footer } from "./Footer/Footer"
 import { Button } from "antd"

@@ -1,4 +1,3 @@
-import React from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { photoActions, photosSelector } from "../../redux/slices/photos"
 import { useFiles } from "../../context/FileContext"

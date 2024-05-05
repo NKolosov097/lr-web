@@ -1,4 +1,3 @@
-import React from "react"
 import { Button, Input, Modal, Popover, Row } from "antd"
 import styles from "./ModalChangePhotoInfo.module.css"
 import TextArea from "antd/es/input/TextArea"

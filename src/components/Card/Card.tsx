@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./Card.module.css"
 import { IPhoto } from "../../types/types"
 import { Button, Col, Row, Skeleton, Typography } from "antd"

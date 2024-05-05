@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { Marker, Popup, useMapEvents } from "react-leaflet"
 import { Mark } from "../Mark/Mark"
 import { notification } from "antd/lib"

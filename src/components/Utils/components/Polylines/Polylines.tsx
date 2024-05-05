@@ -1,7 +1,7 @@
 import { ShareAltOutlined } from "@ant-design/icons"
 import { Button, message } from "antd/lib"
 import { LatLngExpression } from "leaflet"
-import React, { useState } from "react"
+import { useState } from "react"
 import { Polyline, useMapEvents } from "react-leaflet"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { clickType, setClickType } from "../../../../redux/slices/click"

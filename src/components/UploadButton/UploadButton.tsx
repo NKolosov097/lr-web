@@ -1,4 +1,3 @@
-import React from "react"
 import { App, Button, Upload } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
 import exif from "exifr"

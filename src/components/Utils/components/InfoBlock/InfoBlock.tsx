@@ -1,4 +1,3 @@
-import React from "react"
 import { Button, Popover } from "antd"
 import { HomeOutlined, InfoCircleOutlined } from "@ant-design/icons"
 import styles from "./InfoBlock.module.css"

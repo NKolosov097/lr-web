@@ -1,4 +1,3 @@
-import React from "react"
 import styles from "./Utils.module.css"
 import { InfoBlock } from "./components/InfoBlock/InfoBlock"
 import { Polylines } from "./components/Polylines/Polylines"
