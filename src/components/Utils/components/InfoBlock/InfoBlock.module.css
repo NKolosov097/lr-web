@@ -1,0 +1,40 @@
+.contentWrapper {
+    width: 235px;
+    height: auto;
+}
+
+.hotBtns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.hotBtnItem {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    padding: 0;
+}
+
+.hotBtn {
+    text-align: center;
+    min-width: 24px;
+}
+
+.hotBtnTitle {
+    text-align: center;
+    min-width: 54px;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.hotBtnDescription {
+    margin: 0;
+    padding: 0;
+}

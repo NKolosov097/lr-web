@@ -2,7 +2,16 @@ html {
     height: 100vh;
 }
 
+body {
+    margin: 0;
+}
+
 /* sizing of map container */
 .leaflet-container {
     height: 100vh;
+    position: relative;
+}
+
+.leaflet-bottom ~ .leaflet-right {
+    display: none;
 }
