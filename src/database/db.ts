@@ -15,7 +15,7 @@ export class MapAppDbClass extends Dexie {
         super("MapAppDb")
         this.version(1).stores({
             photos: "&id, title, description, status, viewed, latitude, longitude, altitude, accuracy, altitudeAccuracy, heading, speed, timeStamp",
-            statuses: "id, title, description",
+            statuses: "&id, title, description",
         })
     }
 }
