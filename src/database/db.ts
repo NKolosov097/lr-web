@@ -1,15 +1,9 @@
 import Dexie, { Table } from "dexie"
-import { EStatus, IPhoto } from "../types/types"
-
-interface ITableStatuses {
-    id: number
-    title: EStatus
-    description?: string
-}
+import { IPhoto, IStatus } from "../types/types"
 
 export class MapAppDbClass extends Dexie {
     photos!: Table<IPhoto>
-    statuses!: Table<ITableStatuses>
+    statuses!: Table<IStatus>
 
     constructor() {
         super("MapAppDb")

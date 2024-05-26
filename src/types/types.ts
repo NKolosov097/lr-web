@@ -4,6 +4,12 @@ export enum EStatus {
     success = "success",
 }
 
+export interface IStatus {
+    id: string
+    title: EStatus
+    description?: string
+}
+
 export interface IPhoto {
     id: number | string
     title: string | undefined

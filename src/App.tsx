@@ -10,25 +10,25 @@ import { Helmet } from "react-helmet"
 import { ModalChangePhotoInfo } from "./components/ModalChangePhotoInfo/ModalChangePhotoInfo"
 import { db } from "./database/db"
 import { useEffect } from "react"
-import { EStatus } from "./types/types"
+import { EStatus, IStatus } from "./types/types"
 import { useAppDispatch } from "./redux/hooks"
 import { photoActions } from "./redux/slices/photos"
 
 function App() {
     const dispatch = useAppDispatch()
-    const initStatuses = [
+    const initStatuses: IStatus[] = [
         {
-            id: 1,
+            id: "1",
             title: EStatus.failed,
             description: "The status that shows the request failed",
         },
         {
-            id: 2,
+            id: "2",
             title: EStatus.pending,
             description: "The status that shows the request pending",
         },
         {
-            id: 3,
+            id: "3",
             title: EStatus.success,
             description: "The status that shows the request success",
         },
