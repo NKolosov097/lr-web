@@ -9,12 +9,20 @@ import { drawerSelector } from "../../redux/selectors"
 import { useFiles } from "../../context/FileContext"
 import { resetActivePhoto } from "../../redux/slices/activePhoto"
 import { Helmet } from "react-helmet"
+import { useEffect, useState } from "react"
+import { IPhoto } from "../../types/types"
 
 export const ImageLibrary = () => {
     const photos = useAppSelector(photosSelector)
+    const [filterPhotos, setFilterPhotos] = useState<IPhoto[]>(photos)
+
     const drawerPhoto = useAppSelector(drawerSelector)
     const dispatch = useAppDispatch()
     const { images } = useFiles()
+
+    useEffect(() => {
+        setFilterPhotos(photos)
+    }, [photos])
 
     return (
         <>
@@ -31,7 +39,24 @@ export const ImageLibrary = () => {
                             content={
                                 <div className={styles.drawerSearchWrapper}>
                                     <Row>
-                                        <Input placeholder="Поиск по названию фотографии" />
+                                        <Input
+                                            placeholder="Поиск по названию фотографии"
+                                            onChange={(e) => {
+                                                if (e?.target?.value === "") {
+                                                    setFilterPhotos(photos)
+                                                } else {
+                                                    setFilterPhotos(
+                                                        photos.filter((photo) =>
+                                                            photo.title
+                                                                ?.toLowerCase()
+                                                                ?.includes(
+                                                                    e?.target?.value?.toLowerCase()
+                                                                )
+                                                        )
+                                                    )
+                                                }
+                                            }}
+                                        />
                                     </Row>
                                 </div>
                             }
@@ -54,8 +79,8 @@ export const ImageLibrary = () => {
                 }}
             >
                 <ul className={styles.photoList}>
-                    {photos.length > 0 ? (
-                        photos.map((photo) => (
+                    {filterPhotos.length > 0 ? (
+                        filterPhotos.map((photo) => (
                             <Card
                                 key={photo.id}
                                 imageSrc={images[photo.id]}

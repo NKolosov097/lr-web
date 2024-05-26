@@ -2,7 +2,6 @@ import styles from "./Card.module.css"
 import { IPhoto } from "../../types/types"
 import { Button, Col, Row, Skeleton, Typography } from "antd"
 import { EditOutlined } from "@ant-design/icons"
-import { ModalChangePhotoInfo } from "../ModalChangePhotoInfo/ModalChangePhotoInfo"
 import { openModal } from "../../redux/slices/modalToChangePhotoInfo"
 import { setActivePhoto } from "../../redux/slices/activePhoto"
 import { useAppDispatch } from "../../redux/hooks"
@@ -31,6 +30,7 @@ export const Card = ({ imageSrc, ...polyline }: CardProps) => {
                         <Skeleton.Button
                             style={{ width: 300, height: 200 }}
                             block
+                            active
                         />
                     )}
 
@@ -80,8 +80,6 @@ export const Card = ({ imageSrc, ...polyline }: CardProps) => {
                     </Row>
                 </Col>
             </Row>
-
-            <ModalChangePhotoInfo />
         </li>
     )
 }

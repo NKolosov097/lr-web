@@ -4,12 +4,14 @@ import exif from "exifr"
 import styles from "./UploadButton.module.css"
 import { v4 as uuidv4 } from "uuid"
 import { useAppDispatch } from "../../redux/hooks"
-import { photoActions } from "../../redux/slices/photos"
 import { openModal } from "../../redux/slices/modalToChangePhotoInfo"
 
 import type { UploadProps } from "antd/lib/upload/interface"
 import { useFiles } from "../../context/FileContext"
-import { IPhoto } from "../../types/types"
+import { EStatus, IPhoto } from "../../types/types"
+import { setActivePhoto } from "../../redux/slices/activePhoto"
+import { message } from "antd/lib"
+import { photoActions } from "../../redux/slices/photos"
 
 export const UploadButton = () => {
     const { notification } = App.useApp()
@@ -34,12 +36,13 @@ export const UploadButton = () => {
         }
         fileReader.readAsDataURL(photo)
 
-        const polyline: IPhoto = {
+        const photoObj: IPhoto = {
             id: id,
             title: "",
             description: "",
             latitude: data.latitude,
             longitude: data.longitude,
+            status: EStatus.success,
             viewed: false,
             altitude: 0,
             accuracy: null,
@@ -49,9 +52,11 @@ export const UploadButton = () => {
             timeStamp: Date.now(),
         }
 
-        dispatch(photoActions.addPhoto(polyline))
-        dispatch(openModal(polyline))
-        return false
+        dispatch(photoActions.addPhoto(photoObj))
+        dispatch(setActivePhoto(id))
+        dispatch(openModal(photoObj))
+
+        message.success({ content: "Фотография успешно добавлена" })
     }
 
     return (

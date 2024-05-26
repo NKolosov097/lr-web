@@ -15,3 +15,8 @@ body {
 .leaflet-bottom ~ .leaflet-right {
     display: none;
 }
+
+.ant-modal-root {
+    position: absolute;
+    z-index: 1001;
+}

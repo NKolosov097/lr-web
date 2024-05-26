@@ -1,17 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from '../rootReducer'
+import { createSlice } from "@reduxjs/toolkit"
+import type { PayloadAction } from "@reduxjs/toolkit"
+import { RootState } from "../rootReducer"
 
 interface IInitState {
     id: string | number
 }
 
 const initialState: IInitState = {
-    id: '',
+    id: "",
 }
 
 export const activePhotoSlice = createSlice({
-    name: 'activePhoto',
+    name: "activePhoto",
     initialState,
     reducers: {
         getActivePhoto: (state) => {
@@ -21,7 +21,7 @@ export const activePhotoSlice = createSlice({
             state.id = payload.payload
         },
         resetActivePhoto: (state) => {
-            state.id = ''
+            state.id = ""
         },
     },
 })

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { Marker, Popup, useMapEvents } from "react-leaflet"
 import { Mark } from "../Mark/Mark"
 import { notification } from "antd/lib"
@@ -8,6 +8,9 @@ export const LocationMarker = () => {
         lat: number
         lng: number
     } | null>(null)
+
+    const markerRef = useRef(null)
+
     const map = useMapEvents({
         keydown(e) {
             if (e.originalEvent.key === "Home") {
@@ -27,8 +30,30 @@ export const LocationMarker = () => {
         },
     })
 
+    const eventHandlers = useMemo(
+        () => ({
+            dragend() {
+                const marker = markerRef.current
+                if (marker != null) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const { lat, lng } = marker.getLatLng()
+
+                    setPosition({ lat, lng })
+                }
+            },
+        }),
+        []
+    )
+
     return position === null ? null : (
-        <Marker position={position} icon={Mark()}>
+        <Marker
+            position={position}
+            icon={Mark()}
+            draggable
+            eventHandlers={eventHandlers}
+            ref={markerRef}
+        >
             <Popup>Вы находитесь здесь</Popup>
         </Marker>
     )

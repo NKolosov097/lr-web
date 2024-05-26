@@ -1,21 +1,10 @@
 import React from "react"
-import { useState } from "react"
-import { useAppDispatch, useAppSelector } from "../redux/hooks"
-import { photoActions } from "../redux/slices/photos"
-import { openDrawer } from "../redux/slices/drawerPhoto."
-import { resetActivePhoto } from "../redux/slices/activePhoto"
-import { activePhotoSelector } from "../redux/selectors"
-import MarkerClusterGroup from "react-leaflet-cluster"
-import { Marker, Polyline, Popup } from "react-leaflet"
-import { Mark } from "./Mark/Mark"
 import { LatLngExpression } from "leaflet"
 import GpxParser from "gpxparser"
 import { gpxData } from "../mock/gpxData/gpx"
+import { Polyline } from "react-leaflet"
 
 export const RouteDesigner = () => {
-    const activePhotoId = useAppSelector(activePhotoSelector)
-    const dispatch = useAppDispatch()
-
     const gpx = new GpxParser()
     gpx.parse(gpxData)
     // здесь выводятся координаты, считанные с gpx файла

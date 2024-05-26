@@ -23,14 +23,7 @@ export const Toolbar = () => {
                 <Button
                     icon={<PictureOutlined />}
                     onClick={() => {
-                        dispatch(
-                            photoActions.toViewAllPhotos([
-                                ...photos.map((photo) => ({
-                                    ...photo,
-                                    viewed: true,
-                                })),
-                            ])
-                        )
+                        dispatch(photoActions.toViewAllPhotos())
                         dispatch(openDrawer())
                     }}
                 />

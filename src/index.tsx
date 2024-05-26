@@ -8,6 +8,8 @@ import { FileProvider } from "./context/FileContext"
 import { ConfigProvider } from "antd"
 import ru_RU from "antd/lib/locale/ru_RU"
 import "dayjs/locale/ru"
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 // import * as serviceWorker from "./serviceWorker"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)

@@ -1,7 +1,14 @@
+export enum EStatus {
+    failed = "failed",
+    pending = "pending",
+    success = "success",
+}
+
 export interface IPhoto {
     id: number | string
     title: string | undefined
     description: string | undefined
+    status: EStatus
     viewed: boolean
     latitude: number // Широта
     longitude: number // Долгота

@@ -21,7 +21,7 @@ import {
 } from "../../redux/slices/activePhoto"
 import { setClickType } from "../../redux/slices/click"
 import { EClickType } from "../../types/types"
-import { Divider, Popconfirm } from "antd/lib"
+import { Divider } from "antd/lib"
 
 export const ModalChangePhotoInfo = () => {
     const id = useAppSelector(activePhotoSelector)
@@ -38,6 +38,7 @@ export const ModalChangePhotoInfo = () => {
             }
             onCancel={() => dispatch(closeModal())}
             footer={null}
+            style={{ zIndex: 9999999 }}
         >
             <h6 className={styles.modalInputLabel}>Название фотографии</h6>
             <Input
@@ -86,16 +87,6 @@ export const ModalChangePhotoInfo = () => {
             </Row>
 
             <Row className={styles.modalFooter}>
-                {/* <Popconfirm
-                    title="Вы уверены, что хотите удалить фото?"
-                    trigger="click"
-                    onConfirm={() => {
-                        dispatch(photoActions.deletePhoto(id))
-                        dispatch(resetModal())
-                        dispatch(resetActivePhoto())
-                    }}
-                    style={{ zIndex: 410 }}
-                > */}
                 <Button
                     danger
                     ghost
@@ -106,7 +97,6 @@ export const ModalChangePhotoInfo = () => {
                         dispatch(resetActivePhoto())
                     }}
                 />
-                {/* </Popconfirm> */}
                 <div className={styles.modalFooterRight}>
                     <Button
                         type="primary"

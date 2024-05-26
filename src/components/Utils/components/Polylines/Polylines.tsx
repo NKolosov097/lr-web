@@ -1,5 +1,4 @@
-import { ShareAltOutlined } from "@ant-design/icons"
-import { Button, message } from "antd/lib"
+import { Button, Popconfirm, Row, message } from "antd/lib"
 import { LatLngExpression } from "leaflet"
 import { useState } from "react"
 import { Polyline, useMapEvents } from "react-leaflet"
@@ -10,51 +9,48 @@ import styles from "./Polylines.module.css"
 import cn from "classnames"
 import { v4 as uuidv4 } from "uuid"
 import { Helmet } from "react-helmet"
-
-interface IPolyline {
-    id: string | number
-    positions: LatLngExpression[] | LatLngExpression[][]
-}
+import { DeleteOutlined, RiseOutlined } from "@ant-design/icons"
 
 export const Polylines = () => {
-    const [polylines, setPolilynes] = useState<IPolyline[]>([
-        {
-            id: 1,
-            positions: [
-                [55.751061122423486, 37.61046491702407],
-                [55.75126112242844, 37.6144649178244],
-                [55.75306112242844, 37.6124649178244],
-            ],
-        },
-    ])
+    const [polylines, setPolilynes] = useState<LatLngExpression[]>([])
     const click = useAppSelector(clickType)
     const dispatch = useAppDispatch()
 
-    useMapEvents({
-        dblclick(e) {
-            if (click === EClickType.addPolyline) {
-                setPolilynes((prev) => [
-                    ...prev,
-                    {
-                        id: uuidv4(),
-                        positions: [[e.latlng.lat, e.latlng.lng]],
-                    },
-                ])
-            }
+    const getDistance = (
+        lat1: number,
+        lon1: number,
+        lat2: number,
+        lon2: number
+    ) => {
+        const R = 6371 // Радиус Земли в километрах
+        const dLat = ((lat2 - lat1) * Math.PI) / 180
+        const dLon = ((lon2 - lon1) * Math.PI) / 180
 
-            console.log("dblclick: ", polylines[0])
-        },
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((lat1 * Math.PI) / 180) *
+                Math.cos((lat2 * Math.PI) / 180) *
+                Math.sin(dLon / 2) *
+                Math.sin(dLon / 2)
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        const distance = R * c
+        return distance
+    }
+
+    useMapEvents({
         click(e) {
             if (click === EClickType.addPolyline) {
-                setPolilynes((prev) => [
-                    ...prev,
-                    {
-                        id: uuidv4(),
-                        positions: [[e.latlng.lat, e.latlng.lng]],
-                    },
-                ])
+                setPolilynes((prev) => [...prev, [e.latlng.lat, e.latlng.lng]])
 
-                console.log([[e.latlng.lat, e.latlng.lng]])
+                const lat1 = 55.7851408637352
+                const lon1 = 37.47057859834967
+
+                const lat2 = 55.785550942749666
+                const lon2 = 37.463951475539226
+
+                const dist = getDistance(lat1, lon1, lat2, lon2)
+                console.log(`Расстояние между координатами: ${dist} км`)
             }
         },
     })
@@ -64,28 +60,67 @@ export const Polylines = () => {
             {click === EClickType.addPolyline && (
                 <Helmet title="Map App | Добавление точек на карту" />
             )}
-            <Button
-                icon={<ShareAltOutlined />}
-                onClick={() => {
-                    if (click === EClickType.addPolyline) {
-                        dispatch(setClickType(EClickType.null))
-                        dispatch(setClickType(EClickType.addPolyline))
-                    } else {
-                        dispatch(setClickType(EClickType.addPolyline))
-                        message.info({
-                            content: "При клике на карту, вы строите маршрут",
-                            duration: 3,
-                        })
-                    }
-                }}
-                className={cn({
-                    [styles.activeBtn]: click === EClickType.addPolyline,
-                })}
-            />
 
-            {polylines.map((polyline) => (
-                <Polyline key={polyline.id} positions={polyline.positions} />
-            ))}
+            <Row style={{ flexDirection: "column", gap: 5 }}>
+                <Button
+                    icon={<RiseOutlined style={{ fontSize: 20 }} />}
+                    onClick={() => {
+                        if (click === EClickType.addPolyline) {
+                            dispatch(setClickType(EClickType.null))
+                            // Когда мы кликаем по линейке для того, чтобы прекратить строить линии, мы все равно триггерим клик по карте и строим еще одну линию. Для этого сразу же удаляем ее
+                            setPolilynes((prev) => [
+                                ...prev.slice(0, prev.length - 1),
+                            ])
+                            message.info({
+                                content: "Построение маршрута завершено",
+                                duration: 1.5,
+                            })
+                        } else {
+                            dispatch(setClickType(EClickType.addPolyline))
+                            message.info({
+                                content: "Вы строите маршрут по клику на карту",
+                                duration: 3,
+                            })
+                        }
+                    }}
+                    className={cn({
+                        [styles.activeBtn]: click === EClickType.addPolyline,
+                    })}
+                />
+
+                {polylines.length > 0 && (
+                    <Popconfirm
+                        title="Вы уверены, что хотите удалить все линии?"
+                        placement="bottom"
+                        okText="Да"
+                        cancelText="Нет"
+                        onConfirm={() => {
+                            setPolilynes([])
+                            dispatch(setClickType(EClickType.null))
+                        }}
+                    >
+                        <Button
+                            danger
+                            icon={<DeleteOutlined />}
+                            onClick={() =>
+                                setPolilynes((prev) => [
+                                    ...prev.slice(0, prev.length - 1),
+                                ])
+                            }
+                        />
+                    </Popconfirm>
+                )}
+            </Row>
+
+            <Polyline
+                key={uuidv4()}
+                positions={polylines}
+                eventHandlers={{
+                    mousedown: (e) => {
+                        console.log(e)
+                    },
+                }}
+            />
         </>
     )
 }
