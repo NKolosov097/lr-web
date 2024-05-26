@@ -1,7 +1,6 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
 import { IPhoto } from "../../types/types"
 import { RootState } from "../rootReducer"
-import { db } from "../../database/db"
 
 const initialState: IPhoto[] = []
 
@@ -15,54 +14,15 @@ export const photosSlice = createSlice({
     initialState: photoAdapter.getInitialState(initialState),
     reducers: {
         initPhotos: photoAdapter.addMany,
-        addPhoto: (state, { payload }) => {
-            const addPhotoToDb = async () => {
-                await db.photos.add(payload)
-            }
-
-            addPhotoToDb()
-
-            photoAdapter.addOne(state, payload)
-        },
-        changePhotoInfo: (state, { payload }) => {
-            const changePhotoInfoIntoDb = async () => {
-                await db.photos
-                    .where({ id: payload.id })
-                    .modify(payload.changes)
-            }
-
-            changePhotoInfoIntoDb()
-
-            photoAdapter.updateOne(state, payload)
-        },
-        deletePhoto: (state, action) => {
-            const deletePhotoFromDb = async () => {
-                await db.photos.where({ id: action.payload }).delete()
-            }
-
-            deletePhotoFromDb()
-
-            photoAdapter.removeOne(state, action)
-        },
+        addPhoto: photoAdapter.addOne,
+        changePhotoInfo: photoAdapter.updateOne,
+        deletePhoto: photoAdapter.removeOne,
         toViewAllPhotos: (state) => {
             const viewAllPhotos = () =>
                 Object.values(state.entities).map((photo) => ({
                     ...photo,
                     viewed: true,
                 }))
-
-            const viewAllPhotosInDb = async () => {
-                db.photos.toArray().then((res) => {
-                    res.map((photo) =>
-                        db.photos.update(photo.id, {
-                            ...photo,
-                            viewed: true,
-                        })
-                    )
-                })
-            }
-
-            viewAllPhotosInDb()
 
             photoAdapter.upsertMany(state, viewAllPhotos())
         },

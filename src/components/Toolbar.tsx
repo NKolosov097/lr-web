@@ -5,11 +5,13 @@ import { PictureOutlined } from "@ant-design/icons"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { openDrawer } from "../redux/slices/drawerPhoto."
 import { Badge } from "antd/lib"
-import { photoActions, photosSelector } from "../redux/slices/photos"
+import { photosSelector } from "../redux/slices/photos"
+import { useViewAllPhotos } from "../hooks/photos/useViewAllPhotos.hook"
 
 export const Toolbar = () => {
     const dispatch = useAppDispatch()
     const photos = useAppSelector(photosSelector)
+    const viewAllPhotos = useViewAllPhotos()
 
     return (
         <Footer>
@@ -23,7 +25,7 @@ export const Toolbar = () => {
                 <Button
                     icon={<PictureOutlined />}
                     onClick={() => {
-                        dispatch(photoActions.toViewAllPhotos())
+                        viewAllPhotos()
                         dispatch(openDrawer())
                     }}
                 />

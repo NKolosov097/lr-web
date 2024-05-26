@@ -11,12 +11,13 @@ import { useFiles } from "../../context/FileContext"
 import { EStatus, IPhoto } from "../../types/types"
 import { setActivePhoto } from "../../redux/slices/activePhoto"
 import { message } from "antd/lib"
-import { photoActions } from "../../redux/slices/photos"
+import { useAddPhoto } from "../../hooks/photos/useAddPhoto.hook"
 
 export const UploadButton = () => {
     const { notification } = App.useApp()
     const { addImage } = useFiles()
     const dispatch = useAppDispatch()
+    const addPhoto = useAddPhoto()
 
     const onFileChange: UploadProps<File>["beforeUpload"] = async (photo) => {
         const data = await exif.gps(photo)
@@ -52,7 +53,7 @@ export const UploadButton = () => {
             timeStamp: Date.now(),
         }
 
-        dispatch(photoActions.addPhoto(photoObj))
+        addPhoto(photoObj)
         dispatch(setActivePhoto(id))
         dispatch(openModal(photoObj))
 

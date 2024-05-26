@@ -1,5 +1,6 @@
 import { noop } from "antd/es/_util/warning"
 import { createContext, useContext, useState } from "react"
+import { db } from "../database/db"
 
 export type ImageStore = {
     [key: string]: string
@@ -26,10 +27,30 @@ export const useFiles = () => {
 export function FileProvider({ children }: { children: React.ReactNode }) {
     const [images, setImages] = useState<ImageStore>({})
 
-    const addImage = (id: string, fileSrc: string) =>
+    const initImages = async () => {
+        try {
+            await db.images.toArray().then((res) => {
+                res.forEach((img) => {
+                    setImages({ [img.id]: img.fileSrc })
+                })
+            })
+        } catch (e) {
+            console.error(e)
+        }
+    }
+    initImages()
+
+    const addImage = async (id: string, fileSrc: string) => {
         setImages((prevFiles) => ({ ...prevFiles, [id]: fileSrc }))
 
-    const removeImage = (removeFileId: string) => {
+        try {
+            await db.images.add({ id, fileSrc })
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const removeImage = async (removeFileId: string) => {
         setImages((prevFiles) =>
             Object.keys(prevFiles)
                 .filter((fileId) => fileId !== removeFileId)
@@ -38,6 +59,12 @@ export function FileProvider({ children }: { children: React.ReactNode }) {
                     return newImageStore
                 }, {})
         )
+
+        try {
+            await db.images.delete(removeFileId)
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     return (

@@ -26,6 +26,11 @@ export interface IPhoto {
     timeStamp: number // Дата создания объекта данных
 }
 
+export interface IImages {
+    id: string
+    fileSrc: string
+}
+
 export interface IModalChangePhotoInfo {
     isOpen: boolean
     title: string | undefined

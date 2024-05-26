@@ -14,15 +14,13 @@ import "dayjs/locale/ru"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
-    <React.StrictMode>
-        <ConfigProvider locale={ru_RU}>
-            <Provider store={store}>
-                <FileProvider>
-                    <App />
-                </FileProvider>
-            </Provider>
-        </ConfigProvider>
-    </React.StrictMode>
+    <ConfigProvider locale={ru_RU}>
+        <Provider store={store}>
+            <FileProvider>
+                <App />
+            </FileProvider>
+        </Provider>
+    </ConfigProvider>
 )
 
 // serviceWorker.register()

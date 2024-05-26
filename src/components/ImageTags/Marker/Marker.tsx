@@ -6,8 +6,7 @@ import { Mark } from "../../Mark/Mark"
 import { useFiles } from "../../../context/FileContext"
 import { Popup, Marker as MarkerLeaflet } from "react-leaflet"
 import { useMemo, useRef } from "react"
-import { useAppDispatch } from "../../../redux/hooks"
-import { photoActions } from "../../../redux/slices/photos"
+import { useChangePhotoInfo } from "../../../hooks/photos/useChangePhotoInfo.hook"
 
 interface IMarkerProps {
     photo: IPhoto
@@ -16,7 +15,7 @@ interface IMarkerProps {
 export const Marker = ({ photo }: IMarkerProps) => {
     const { images } = useFiles()
     const markerRef = useRef(null)
-    const dispatch = useAppDispatch()
+    const changePhotoInfo = useChangePhotoInfo()
 
     const eventHandlers = useMemo(
         () => ({
@@ -27,15 +26,13 @@ export const Marker = ({ photo }: IMarkerProps) => {
                     // @ts-ignore
                     const { lat, lng } = marker.getLatLng()
 
-                    dispatch(
-                        photoActions.changePhotoInfo({
-                            id: photo?.id,
-                            changes: {
-                                latitude: lat,
-                                longitude: lng,
-                            },
-                        })
-                    )
+                    changePhotoInfo({
+                        id: photo?.id,
+                        changes: {
+                            latitude: lat,
+                            longitude: lng,
+                        },
+                    })
                 }
             },
         }),

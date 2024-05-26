@@ -13,7 +13,6 @@ import {
     closeModal,
     resetModal,
 } from "../../redux/slices/modalToChangePhotoInfo"
-import { photoActions } from "../../redux/slices/photos"
 import { closeDrawer } from "../../redux/slices/drawerPhoto."
 import {
     activePhotoSelector,
@@ -22,11 +21,15 @@ import {
 import { setClickType } from "../../redux/slices/click"
 import { EClickType } from "../../types/types"
 import { Divider } from "antd/lib"
+import { useDeletePhoto } from "../../hooks/photos/useDeletePhoto.hook"
+import { useChangePhotoInfo } from "../../hooks/photos/useChangePhotoInfo.hook"
 
 export const ModalChangePhotoInfo = () => {
     const id = useAppSelector(activePhotoSelector)
     const modal = useAppSelector((state) => state.modalToChangePhotoInfo)
     const dispatch = useAppDispatch()
+    const deletePhoto = useDeletePhoto()
+    const changePhotoInfo = useChangePhotoInfo()
 
     return (
         <Modal
@@ -92,7 +95,7 @@ export const ModalChangePhotoInfo = () => {
                     ghost
                     icon={<DeleteOutlined />}
                     onClick={() => {
-                        dispatch(photoActions.deletePhoto(id))
+                        deletePhoto(id)
                         dispatch(resetModal())
                         dispatch(resetActivePhoto())
                     }}
@@ -101,15 +104,13 @@ export const ModalChangePhotoInfo = () => {
                     <Button
                         type="primary"
                         onClick={() => {
-                            dispatch(
-                                photoActions.changePhotoInfo({
-                                    id: id,
-                                    changes: {
-                                        title: modal.title,
-                                        description: modal.description,
-                                    },
-                                })
-                            )
+                            changePhotoInfo({
+                                id: id,
+                                changes: {
+                                    title: modal.title,
+                                    description: modal.description,
+                                },
+                            })
                             dispatch(resetModal())
                         }}
                     >

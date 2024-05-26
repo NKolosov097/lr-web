@@ -56,6 +56,10 @@ function App() {
         }
 
         openDbConnection()
+
+        return () => {
+            db.close()
+        }
     }, [])
 
     return (

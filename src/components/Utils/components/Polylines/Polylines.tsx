@@ -1,6 +1,6 @@
 import { Button, Popconfirm, Row, message } from "antd/lib"
-import { LatLngExpression } from "leaflet"
-import { useState } from "react"
+import { LatLng, LatLngExpression } from "leaflet"
+import { useEffect, useState } from "react"
 import { Polyline, useMapEvents } from "react-leaflet"
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks"
 import { clickType, setClickType } from "../../../../redux/slices/click"
@@ -10,6 +10,7 @@ import cn from "classnames"
 import { v4 as uuidv4 } from "uuid"
 import { Helmet } from "react-helmet"
 import { DeleteOutlined, RiseOutlined } from "@ant-design/icons"
+import { db } from "../../../../database/db"
 
 export const Polylines = () => {
     const [polylines, setPolilynes] = useState<LatLngExpression[]>([])
@@ -38,10 +39,47 @@ export const Polylines = () => {
         return distance
     }
 
+    useEffect(() => {
+        const initPolylines = async () => {
+            try {
+                await db.polylines.toArray().then((res) => {
+                    res?.forEach((polyline) => {
+                        if (polyline) {
+                            setPolilynes((prev) => [
+                                ...prev,
+                                new LatLng(polyline.lat, polyline.lng),
+                            ])
+                        }
+                    })
+                })
+            } catch (e) {
+                console.error(e)
+            }
+        }
+
+        initPolylines()
+    }, [])
+
     useMapEvents({
         click(e) {
             if (click === EClickType.addPolyline) {
                 setPolilynes((prev) => [...prev, [e.latlng.lat, e.latlng.lng]])
+
+                const addPolylineToDb = async () => {
+                    try {
+                        await db.polylines.toArray().then((res) => {
+                            db.polylines.add({
+                                id: res.length,
+                                lat: e.latlng.lat,
+                                lng: e.latlng.lng,
+                            })
+                        })
+                    } catch (e) {
+                        console.error(e)
+                    }
+                }
+
+                addPolylineToDb()
 
                 const lat1 = 55.7851408637352
                 const lon1 = 37.47057859834967
@@ -54,6 +92,20 @@ export const Polylines = () => {
             }
         },
     })
+
+    const deletePolylines = async () => {
+        setPolilynes([])
+
+        try {
+            await db.polylines.toArray().then((res) => {
+                res.forEach((polyline) => {
+                    db.polylines.delete(polyline.id)
+                })
+            })
+        } catch (e) {
+            console.error(e)
+        }
+    }
 
     return (
         <>
@@ -71,6 +123,7 @@ export const Polylines = () => {
                             setPolilynes((prev) => [
                                 ...prev.slice(0, prev.length - 1),
                             ])
+
                             message.info({
                                 content: "Построение маршрута завершено",
                                 duration: 1.5,
@@ -95,18 +148,18 @@ export const Polylines = () => {
                         okText="Да"
                         cancelText="Нет"
                         onConfirm={() => {
-                            setPolilynes([])
+                            deletePolylines()
                             dispatch(setClickType(EClickType.null))
                         }}
                     >
                         <Button
                             danger
                             icon={<DeleteOutlined />}
-                            onClick={() =>
+                            onClick={() => {
                                 setPolilynes((prev) => [
                                     ...prev.slice(0, prev.length - 1),
                                 ])
-                            }
+                            }}
                         />
                     </Popconfirm>
                 )}
