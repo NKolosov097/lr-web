@@ -20,6 +20,10 @@ export const gpxData = `<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpx
       <ele>6.87</ele>
       <time>2009-10-17T18:37:34Z</time>
     </trkpt>
+    <trkpt lat="48.6445000" lon="-124.326100">
+      <ele>6.87</ele>
+      <time>2009-10-17T18:37:34Z</time>
+    </trkpt>
   </trkseg>
 </trk>
 </gpx>`
