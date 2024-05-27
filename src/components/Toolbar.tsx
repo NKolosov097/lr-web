@@ -6,12 +6,12 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { openDrawer } from "../redux/slices/drawerPhoto."
 import { Badge } from "antd/lib"
 import { photosSelector } from "../redux/slices/photos"
-import { useViewAllPhotos } from "../hooks/photos/useViewAllPhotos.hook"
+import { usePhotos } from "../hooks/usePhotos.hook"
 
 export const Toolbar = () => {
     const dispatch = useAppDispatch()
     const photos = useAppSelector(photosSelector)
-    const viewAllPhotos = useViewAllPhotos()
+    const { viewAllPhotos } = usePhotos()
 
     return (
         <Footer>

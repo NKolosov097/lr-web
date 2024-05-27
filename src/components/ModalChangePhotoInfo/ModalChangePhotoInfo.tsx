@@ -21,15 +21,13 @@ import {
 import { setClickType } from "../../redux/slices/click"
 import { EClickType } from "../../types/types"
 import { Divider } from "antd/lib"
-import { useDeletePhoto } from "../../hooks/photos/useDeletePhoto.hook"
-import { useChangePhotoInfo } from "../../hooks/photos/useChangePhotoInfo.hook"
+import { usePhotos } from "../../hooks/usePhotos.hook"
 
 export const ModalChangePhotoInfo = () => {
     const id = useAppSelector(activePhotoSelector)
     const modal = useAppSelector((state) => state.modalToChangePhotoInfo)
     const dispatch = useAppDispatch()
-    const deletePhoto = useDeletePhoto()
-    const changePhotoInfo = useChangePhotoInfo()
+    const { changePhotoInfo, deletePhoto } = usePhotos()
 
     return (
         <Modal

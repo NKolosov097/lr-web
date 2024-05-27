@@ -6,7 +6,7 @@ import { Mark } from "../../Mark/Mark"
 import { useFiles } from "../../../context/FileContext"
 import { Popup, Marker as MarkerLeaflet } from "react-leaflet"
 import { useMemo, useRef } from "react"
-import { useChangePhotoInfo } from "../../../hooks/photos/useChangePhotoInfo.hook"
+import { usePhotos } from "../../../hooks/usePhotos.hook"
 
 interface IMarkerProps {
     photo: IPhoto
@@ -15,7 +15,7 @@ interface IMarkerProps {
 export const Marker = ({ photo }: IMarkerProps) => {
     const { images } = useFiles()
     const markerRef = useRef(null)
-    const changePhotoInfo = useChangePhotoInfo()
+    const { changePhotoInfo } = usePhotos()
 
     const eventHandlers = useMemo(
         () => ({
