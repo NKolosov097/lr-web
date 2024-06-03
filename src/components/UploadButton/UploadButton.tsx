@@ -17,8 +17,10 @@ export const UploadButton = () => {
     const { notification } = App.useApp()
     const { addImage } = useFiles()
     const dispatch = useAppDispatch()
+    // Берем функцию для добавления фотографии
     const { addPhoto } = usePhotos()
 
+    // Описываем функцию для загрузки фотографии с устройства в приложение
     const onFileChange: UploadProps<File>["beforeUpload"] = async (photo) => {
         const data = await exif.gps(photo)
         if (!data || !data.latitude || !data.longitude) {
@@ -37,6 +39,7 @@ export const UploadButton = () => {
         }
         fileReader.readAsDataURL(photo)
 
+        // формируем объект, который запишем в redux-toolkit в photos и в indexDB
         const photoObj: IPhoto = {
             id: id,
             title: "",
@@ -53,10 +56,12 @@ export const UploadButton = () => {
             timeStamp: Date.now(),
         }
 
+        // Добавляем фотографию и все данные о ней в хранилища
         addPhoto(photoObj)
         dispatch(setActivePhoto(id))
         dispatch(openModal(photoObj))
 
+        // Выводим сообщение об успешном завершении операции по добавлению фотографии в приложение
         message.success({ content: "Фотография успешно добавлена" })
     }
 

@@ -15,7 +15,12 @@ import { useAppDispatch } from "./redux/hooks"
 import { photoActions } from "./redux/slices/photos"
 
 function App() {
+    // Вызываем функцию из Redux-toolkit, которая возвращает функцию
+    // для работы со state manager (Redux-toolkit)
     const dispatch = useAppDispatch()
+
+    // Начальное состояние для таблицы статусов
+    // в Redux-toolkit и в indexDB
     const initStatuses: IStatus[] = [
         {
             id: "1",
@@ -34,20 +39,30 @@ function App() {
         },
     ]
 
+    // При инициализации приложения добавляем словарь статусов
+    // в Redux-toolkit и в indexDB
     useEffect(() => {
+        // Функция, позволяющая открыть соединение с базой данных MapAppDb
         const openDbConnection = async () => {
             await db.open().then((res) => {
+                // Обращаемся к таблице статусов
                 res.table("statuses")
                     .toArray()
                     .then((r) => {
+                        // Если в indexDB нет словаря статусов,
+                        // тогда записываем его
                         if (r?.length === 0) {
                             res.table("statuses").bulkAdd(initStatuses)
                         }
                     })
 
+                // Обращаемся к таблице фотографий
                 res.table("photos")
                     .toArray()
                     .then((r) => {
+                        // Если в indexDB есть фотографии,
+                        // тогда записываем их в redux-toolkit
+                        // для дальнейшей работы с ними внутри приложения
                         if (r?.length > 0) {
                             dispatch(photoActions.initPhotos(r))
                         }
@@ -55,8 +70,10 @@ function App() {
             })
         }
 
+        // Открываем соединение с базой данных MapAppDb
         openDbConnection()
 
+        // При закрытии приложения мы закрываем соединение с indexDB
         return () => {
             db.close()
         }

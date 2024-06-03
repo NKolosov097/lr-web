@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, Popconfirm, Row, message } from "antd/lib"
 import { LatLng, LatLngExpression } from "leaflet"
 import { useEffect, useState } from "react"
@@ -58,28 +59,32 @@ export const Polylines = () => {
         }
 
         initPolylines()
+
+        return () => {
+            const addPolylinesToDb = async () => {
+                try {
+                    polylines?.forEach(async (polyline) => {
+                        await db.polylines.add({
+                            id: Math.random(),
+                            // @ts-ignore
+                            lat: polyline?.lat,
+                            // @ts-ignore
+                            lng: polyline?.lng,
+                        })
+                    })
+                } catch (e) {
+                    console.error(e)
+                }
+            }
+
+            addPolylinesToDb()
+        }
     }, [])
 
     useMapEvents({
         click(e) {
             if (click === EClickType.addPolyline) {
                 setPolilynes((prev) => [...prev, [e.latlng.lat, e.latlng.lng]])
-
-                const addPolylineToDb = async () => {
-                    try {
-                        await db.polylines.toArray().then((res) => {
-                            db.polylines.add({
-                                id: res.length,
-                                lat: e.latlng.lat,
-                                lng: e.latlng.lng,
-                            })
-                        })
-                    } catch (e) {
-                        console.error(e)
-                    }
-                }
-
-                addPolylineToDb()
 
                 const lat1 = 55.7851408637352
                 const lon1 = 37.47057859834967
@@ -92,20 +97,6 @@ export const Polylines = () => {
             }
         },
     })
-
-    const deletePolylines = async () => {
-        setPolilynes([])
-
-        try {
-            await db.polylines.toArray().then((res) => {
-                res.forEach((polyline) => {
-                    db.polylines.delete(polyline.id)
-                })
-            })
-        } catch (e) {
-            console.error(e)
-        }
-    }
 
     return (
         <>
@@ -148,7 +139,7 @@ export const Polylines = () => {
                         okText="Да"
                         cancelText="Нет"
                         onConfirm={() => {
-                            deletePolylines()
+                            setPolilynes([])
                             dispatch(setClickType(EClickType.null))
                         }}
                     >
